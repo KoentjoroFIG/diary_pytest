@@ -26,8 +26,9 @@ app.include_router(router=Login_router,tags=["Login"])
 
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Frontend")
-app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+if os.path.isdir(frontend_dir):
+    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
-@app.get("/")
-def serve_frontend():
-    return FileResponse(os.path.join(frontend_dir, "index.html"))
+    @app.get("/")
+    def serve_frontend():
+        return FileResponse(os.path.join(frontend_dir, "index.html"))
