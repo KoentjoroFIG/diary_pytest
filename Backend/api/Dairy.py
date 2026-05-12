@@ -1,39 +1,46 @@
 from fastapi import APIRouter
-Router = APIRouter()
 
-Diaries = []
+router = APIRouter()
+diaries: list[dict[str, str]] = []
 
-@Router.post ("/Diary")
-def MembuatDiary (Tanggal:str,Judul:str,Isi:str):
-    Diary = {
-        "Tanggalnya":Tanggal,
-        "Judulnya":Judul,
-        "Isi":Isi
-        }
-    Diaries.append(Diary)
+@router.post("/Diary")
+def membuat_diary(tanggal: str, judul: str, isi: str):
+    diary_entry = {
+        "Tanggal": tanggal,
+        "Judul": judul,
+        "Isi": isi,
+    }
+    diaries.append(diary_entry)
     return "Diary berhasil ditambahkan."
 
-@Router.get("/Diary")
-def MembacaDiary ():
-    return Diaries
+@router.get("/Diary")
+def membaca_diary():
+    return diaries
 
-@Router.delete ("/Diary")
-def MenghapusDiary (Urutan:int):
-    del Diaries[Urutan-1]
-    return"Diary telah dihapuskan." 
+@router.delete("/Diary")
+def menghapus_diary(urutan: int):
+    del diaries[urutan - 1]
+    return "Diary telah dihapuskan."
 
-@Router.put ("/Diary")
-def MembenarkanDiary (Urutan:int,Pilihan:str,Mengganti:str):
-    diary_dict = Diaries[Urutan-1]
+@router.put("/Diary")
+def membenarkan_diary(urutan: int, pilihan: str, mengganti: str):
+    diary_dict = diaries[urutan - 1]
 
-    if Pilihan=="Tanggal":
-        diary_dict["Tanggalnya"]=Mengganti
-    elif Pilihan=="Judul":
-        diary_dict["Judulnya"]=Mengganti
-    elif Pilihan=="Isi":
-        diary_dict["Isi"]=Mengganti
+    if pilihan == "Tanggal":
+        diary_dict["Tanggal"] = mengganti
+    elif pilihan == "Judul":
+        diary_dict["Judul"] = mengganti
+    elif pilihan == "Isi":
+        diary_dict["Isi"] = mengganti
     else:
         return "Pilihan tidak valid"
 
-    Diaries[Urutan-1] = diary_dict
-    return"Diary berhasil di ubah"
+    diaries[urutan - 1] = diary_dict
+    return "Diary berhasil di ubah"
+
+# compatibility aliases
+Router = router
+MembuatDiary = membuat_diary
+MembacaDiary = membaca_diary
+MenghapusDiary = menghapus_diary
+MembenarkanDiary = membenarkan_diary
